@@ -158,6 +158,7 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
         false;
     if (!confirmed) return;
     await ref.read(adminRepositoryProvider).signOut();
+    ref.read(hardcodedAdminSessionProvider.notifier).state = null;
     if (mounted) context.go(AppRoutes.adminLogin);
   }
 }

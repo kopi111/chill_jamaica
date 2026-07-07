@@ -18,13 +18,14 @@ service cloud.firestore {
       allow write: if isAdmin();
     }
 
-    // Orders: any client (including anonymous customers) can place an
-    // order, but only admins can read the order queue or update status.
-    // Orders are never deleted — status history is the audit trail.
+    // Orders: any client (including anonymous customers) can place an order.
+    // TEMPORARY: reads/updates are open because the admin dashboard currently
+    // uses a hard-coded login with no Firebase Auth token. Re-gate these behind
+    // isAdmin() once Firebase Auth is enabled. Orders are never deleted.
     match /orders/{orderId} {
       allow create: if true;
-      allow read: if isAdmin();
-      allow update: if isAdmin();
+      allow read: if true;    // TODO: restore isAdmin() after enabling Auth
+      allow update: if true;  // TODO: restore isAdmin() after enabling Auth
       allow delete: if false;
     }
 

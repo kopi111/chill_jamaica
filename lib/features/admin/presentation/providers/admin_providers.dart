@@ -23,17 +23,43 @@ final adminRepositoryProvider = Provider<AdminRepository>(
   (ref) => AdminRepositoryImpl(ref.watch(adminAuthDataSourceProvider)),
 );
 
-/// Reactive sign-in state used by the router redirect and dashboard.
-final adminAuthStateProvider = StreamProvider<AdminUser?>(
-  (ref) => ref.watch(adminRepositoryProvider).authState(),
-);
+/// Locally-held admin session for the hard-coded login used while Firebase
+/// Auth is not yet enabled on the project.
+// TODO: remove once Firebase Auth (Email/Password) is enabled and real admin
+// accounts exist; then adminAuthStateProvider can just reflect Firebase.
+final hardcodedAdminSessionProvider = StateProvider<AdminUser?>((ref) => null);
+
+/// Reactive sign-in state used by the router redirect and dashboard. Prefers
+/// the local hard-coded session; otherwise reflects Firebase Auth.
+final adminAuthStateProvider = StreamProvider<AdminUser?>((ref) {
+  final AdminUser? local = ref.watch(hardcodedAdminSessionProvider);
+  if (local != null) return Stream<AdminUser?>.value(local);
+  return ref.watch(adminRepositoryProvider).authState();
+});
 
 /// Drives the login button: idle → loading → error.
 class AdminLoginController extends AutoDisposeAsyncNotifier<void> {
+  // Hard-coded admin credentials, used while Firebase Auth is not enabled.
+  // TODO: remove once real Firebase Auth accounts exist.
+  static const String _devAdminEmail = 'admin@chilljamaica.com';
+  static const String _devAdminPassword = 'ChillJa2026!';
+
   @override
   Future<void> build() async {}
 
   Future<bool> signIn({required String email, required String password}) async {
+    if (email.trim().toLowerCase() == _devAdminEmail &&
+        password == _devAdminPassword) {
+      ref.read(hardcodedAdminSessionProvider.notifier).state = const AdminUser(
+        uid: 'local-admin',
+        email: _devAdminEmail,
+        displayName: 'Chill Jamaica Admin',
+        role: 'super_admin',
+      );
+      state = const AsyncValue<void>.data(null);
+      return true;
+    }
+
     state = const AsyncValue<void>.loading();
     state = await AsyncValue.guard(
       () => ref.read(adminRepositoryProvider).signIn(
