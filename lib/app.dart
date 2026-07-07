@@ -21,6 +21,7 @@ class ChillJamaicaApp extends ConsumerWidget {
       title: AppStrings.appName,
       debugShowCheckedModeBanner: false,
       theme: AppTheme.light,
+      scrollBehavior: const _NoStretchScrollBehavior(),
       routerConfig: router,
     );
   }
@@ -35,5 +36,20 @@ class ChillJamaicaApp extends ConsumerWidget {
         ref.invalidate(syncQueuedOrdersProvider);
       }
     });
+  }
+}
+
+/// Removes the Android "stretch" overscroll effect app-wide, so lists don't
+/// visually stretch when dragged past their edge.
+class _NoStretchScrollBehavior extends MaterialScrollBehavior {
+  const _NoStretchScrollBehavior();
+
+  @override
+  Widget buildOverscrollIndicator(
+    BuildContext context,
+    Widget child,
+    ScrollableDetails details,
+  ) {
+    return child;
   }
 }
