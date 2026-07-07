@@ -1,0 +1,64 @@
+name: chill_jamaica
+description: "Chill Jamaica — fresh coconut water delivery, straight to yuh door."
+publish_to: 'none'
+version: 1.0.0+1
+
+environment:
+  sdk: ^3.11.0
+
+dependencies:
+  flutter:
+    sdk: flutter
+  cupertino_icons: ^1.0.8
+
+  # Firebase
+  firebase_core: ^3.6.0
+  firebase_auth: ^5.3.1
+  cloud_firestore: ^5.4.4
+  firebase_messaging: ^15.1.3
+  firebase_analytics: ^11.3.3
+  firebase_crashlytics: ^4.1.3
+
+  # State management
+  flutter_riverpod: ^2.6.1
+
+  # Navigation
+  go_router: ^14.2.7
+
+  # Location
+  geolocator: ^13.0.1
+  geocoding: ^3.0.0
+
+  # Platform integrations
+  url_launcher: ^6.3.0
+  share_plus: ^10.0.2
+  flutter_local_notifications: ^17.2.3
+  connectivity_plus: ^6.0.5
+
+  # Local storage (offline order queue + cached customer phone)
+  hive: ^2.2.3
+  hive_flutter: ^1.1.0
+
+  # UI
+  google_fonts: ^6.2.1
+  lottie: ^3.1.2
+  cached_network_image: ^3.4.1
+  shimmer: ^3.0.0
+  flutter_slidable: ^3.1.1
+
+  # Formatting
+  intl: ^0.19.0
+
+dev_dependencies:
+  flutter_test:
+    sdk: flutter
+  flutter_lints: ^6.0.0
+  hive_generator: ^2.0.1
+  build_runner: ^2.4.13
+  mocktail: ^1.0.4
+
+flutter:
+  uses-material-design: true
+  assets:
+    - assets/animations/
+    - assets/images/

@@ -1,0 +1,44 @@
+rules_version = '2';
+
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    /**
+     * True when the signed-in user has a corresponding /admins document.
+     * This is the single source of truth for "is this caller an admin".
+     */
+    function isAdmin() {
+      return request.auth != null &&
+        exists(/databases/$(database)/documents/admins/$(request.auth.uid));
+    }
+
+    // Product catalog: visible to everyone, editable only by admins.
+    match /products/{productId} {
+      allow read: if true;
+      allow write: if isAdmin();
+    }
+
+    // Orders: any client (including anonymous customers) can place an
+    // order, but only admins can read the order queue or update status.
+    // Orders are never deleted — status history is the audit trail.
+    match /orders/{orderId} {
+      allow create: if true;
+      allow read: if isAdmin();
+      allow update: if isAdmin();
+      allow delete: if false;
+    }
+
+    // Admin accounts: only other admins may read or manage them.
+    match /admins/{userId} {
+      allow read: if isAdmin();
+      allow write: if isAdmin();
+    }
+
+    // Analytics: admin-only in both directions; written by Cloud Functions
+    // using the Admin SDK, which bypasses these rules entirely.
+    match /analytics/{analyticsId} {
+      allow read: if isAdmin();
+      allow write: if isAdmin();
+    }
+  }
+}

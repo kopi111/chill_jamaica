@@ -1,0 +1,19 @@
+{
+  "name": "chill-jamaica-scripts",
+  "description": "One-off admin/seed scripts for the Chill Jamaica backend",
+  "scripts": {
+    "seed:products": "ts-node seed_products.ts"
+  },
+  "engines": {
+    "node": "18"
+  },
+  "dependencies": {
+    "firebase-admin": "^12.0.0"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0",
+    "ts-node": "^10.9.0",
+    "@types/node": "^18.0.0"
+  },
+  "private": true
+}
