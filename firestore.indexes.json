@@ -1,6 +1,14 @@
 {
   "indexes": [
     {
+      "collectionGroup": "products",
+      "queryScope": "COLLECTION",
+      "fields": [
+        {"fieldPath": "is_available", "order": "ASCENDING"},
+        {"fieldPath": "price_jmd", "order": "ASCENDING"}
+      ]
+    },
+    {
       "collectionGroup": "orders",
       "queryScope": "COLLECTION",
       "fields": [

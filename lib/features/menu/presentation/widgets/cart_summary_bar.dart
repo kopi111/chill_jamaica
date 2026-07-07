@@ -32,30 +32,34 @@ class CartSummaryBar extends ConsumerWidget {
                   const EdgeInsets.symmetric(horizontal: AppDimensions.spaceMd),
               child: Row(
                 children: <Widget>[
-                  Column(
-                    mainAxisAlignment: MainAxisAlignment.center,
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: <Widget>[
-                      Text(
-                        '$count item${count == 1 ? '' : 's'}',
-                        style: const TextStyle(color: AppColors.white, fontSize: 12),
-                      ),
-                      Text(
-                        Formatters.jmd(subtotal),
-                        style: const TextStyle(
-                          color: AppColors.white,
-                          fontSize: 18,
-                          fontWeight: FontWeight.w800,
+                  Expanded(
+                    child: Column(
+                      mainAxisAlignment: MainAxisAlignment.center,
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: <Widget>[
+                        Text(
+                          '$count item${count == 1 ? '' : 's'}',
+                          style: const TextStyle(
+                              color: AppColors.white, fontSize: 12),
                         ),
-                      ),
-                    ],
+                        Text(
+                          Formatters.jmd(subtotal),
+                          style: const TextStyle(
+                            color: AppColors.white,
+                            fontSize: 18,
+                            fontWeight: FontWeight.w800,
+                          ),
+                        ),
+                      ],
+                    ),
                   ),
-                  const Spacer(),
+                  const SizedBox(width: AppDimensions.spaceMd),
                   ElevatedButton.icon(
                     onPressed: count == 0 ? null : onViewCart,
                     style: ElevatedButton.styleFrom(
                       backgroundColor: AppColors.secondaryGold,
                       foregroundColor: AppColors.dark,
+                      minimumSize: const Size(0, AppDimensions.buttonHeight),
                     ),
                     icon: const Icon(Icons.shopping_cart_rounded, size: 18),
                     label: const Text(AppStrings.viewCart),
