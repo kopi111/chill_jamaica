@@ -52,6 +52,7 @@ abstract final class AppStrings {
   static const String adminAppName = 'Jamaica Chilled — Admin';
   static const String adminLogin = 'Admin Login';
   static const String emailLabel = 'Email';
+  static const String usernameLabel = 'Username';
   static const String passwordLabel = 'Password';
   static const String rememberMe = 'Remember me';
   static const String forgotPassword = 'Forgot password?';

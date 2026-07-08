@@ -34,6 +34,13 @@ abstract final class Validators {
     return looksValid ? null : 'Enter a valid email';
   }
 
+  /// Admin username — a non-empty handle (not an email address).
+  static String? username(String? raw) {
+    final String value = (raw ?? '').trim();
+    if (value.isEmpty) return 'Enter your username';
+    return null;
+  }
+
   static String? password(String? raw) {
     final String value = raw ?? '';
     if (value.isEmpty) return 'Enter your password';

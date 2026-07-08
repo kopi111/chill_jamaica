@@ -67,6 +67,17 @@ class _AdminLoginScreenState extends ConsumerState<AdminLoginScreen> {
     });
 
     return Scaffold(
+      appBar: AppBar(
+        backgroundColor: Colors.transparent,
+        elevation: 0,
+        leading: context.canPop()
+            ? IconButton(
+                icon: const Icon(Icons.arrow_back),
+                tooltip: 'Back',
+                onPressed: context.pop,
+              )
+            : null,
+      ),
       body: SafeArea(
         child: Center(
           child: SingleChildScrollView(
@@ -82,12 +93,12 @@ class _AdminLoginScreenState extends ConsumerState<AdminLoginScreen> {
                     const SizedBox(height: AppDimensions.spaceXl),
                     TextFormField(
                       controller: _email,
-                      keyboardType: TextInputType.emailAddress,
-                      autofillHints: const <String>[AutofillHints.email],
-                      validator: Validators.email,
+                      keyboardType: TextInputType.text,
+                      autofillHints: const <String>[AutofillHints.username],
+                      validator: Validators.username,
                       decoration: const InputDecoration(
-                        labelText: AppStrings.emailLabel,
-                        prefixIcon: Icon(Icons.email_outlined),
+                        labelText: AppStrings.usernameLabel,
+                        prefixIcon: Icon(Icons.person_outline),
                       ),
                     ),
                     const SizedBox(height: AppDimensions.spaceMd),

@@ -41,18 +41,18 @@ final adminAuthStateProvider = StreamProvider<AdminUser?>((ref) {
 class AdminLoginController extends AutoDisposeAsyncNotifier<void> {
   // Hard-coded admin credentials, used while Firebase Auth is not enabled.
   // TODO: remove once real Firebase Auth accounts exist.
-  static const String _devAdminEmail = 'admin@chilljamaica.com';
-  static const String _devAdminPassword = 'ChillJa2026!';
+  static const String _devAdminUsername = 'killquick';
+  static const String _devAdminPassword = 'killquick123';
 
   @override
   Future<void> build() async {}
 
   Future<bool> signIn({required String email, required String password}) async {
-    if (email.trim().toLowerCase() == _devAdminEmail &&
+    if (email.trim().toLowerCase() == _devAdminUsername &&
         password == _devAdminPassword) {
       ref.read(hardcodedAdminSessionProvider.notifier).state = const AdminUser(
         uid: 'local-admin',
-        email: _devAdminEmail,
+        email: 'Killquick',
         displayName: 'Jamaica Chilled Admin',
         role: 'super_admin',
       );
