@@ -40,6 +40,7 @@ class ProductGridSkeleton extends StatelessWidget {
       highlightColor: AppColors.backgroundCream,
       child: GridView.builder(
         padding: const EdgeInsets.all(AppDimensions.spaceMd),
+        shrinkWrap: true,
         physics: const NeverScrollableScrollPhysics(),
         gridDelegate: SliverGridDelegateWithFixedCrossAxisCount(
           crossAxisCount: columns,
