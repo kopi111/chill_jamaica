@@ -26,12 +26,7 @@ class MenuScreen extends ConsumerWidget {
 
     return Scaffold(
       appBar: AppBar(
-        // Long-press the logo to reach the staff/admin login (hidden from
-        // customers, discoverable by staff).
-        title: GestureDetector(
-          onLongPress: () => context.push(AppRoutes.adminLogin),
-          child: const Text(AppStrings.appNameEmoji),
-        ),
+        title: const Text(AppStrings.appNameEmoji),
         actions: <Widget>[
           CartBadgeIcon(onTap: () => context.push(AppRoutes.cart)),
           IconButton(

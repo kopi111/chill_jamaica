@@ -15,27 +15,11 @@ import '../../features/order/presentation/screens/my_orders_screen.dart';
 import '../../features/order/presentation/screens/order_confirmation_screen.dart';
 import 'app_routes.dart';
 
-/// Builds the app's [GoRouter], guarding admin routes behind authentication.
-final routerProvider = Provider<GoRouter>((ref) {
+/// Router for the customer/order app: browse the menu, cart, checkout and look
+/// up past orders. It knows nothing about the admin area.
+final customerRouterProvider = Provider<GoRouter>((ref) {
   return GoRouter(
     initialLocation: AppRoutes.menu,
-    refreshListenable: _AuthRefresh(ref),
-    redirect: (BuildContext context, GoRouterState state) {
-      final AdminUser? admin = ref.read(adminAuthStateProvider).valueOrNull;
-      final bool goingToAdminArea = state.matchedLocation
-          .startsWith('/admin');
-      final bool onLoginPage = state.matchedLocation == AppRoutes.adminLogin;
-
-      // Unauthenticated user reaching for the dashboard → send to login.
-      if (goingToAdminArea && !onLoginPage && admin == null) {
-        return AppRoutes.adminLogin;
-      }
-      // Already signed in but sitting on login → jump to the dashboard.
-      if (onLoginPage && admin != null) {
-        return AppRoutes.adminDashboard;
-      }
-      return null;
-    },
     routes: <RouteBase>[
       GoRoute(
         path: AppRoutes.menu,
@@ -60,6 +44,30 @@ final routerProvider = Provider<GoRouter>((ref) {
         path: AppRoutes.myOrders,
         builder: (_, _) => const MyOrdersScreen(),
       ),
+    ],
+    errorBuilder: (BuildContext context, GoRouterState state) => Scaffold(
+      body: Center(child: Text('Route not found: ${state.uri}')),
+    ),
+  );
+});
+
+/// Router for the admin app: login, order dashboard and product management,
+/// with admin routes guarded behind authentication.
+final adminRouterProvider = Provider<GoRouter>((ref) {
+  return GoRouter(
+    initialLocation: AppRoutes.adminLogin,
+    refreshListenable: _AuthRefresh(ref),
+    redirect: (BuildContext context, GoRouterState state) {
+      final AdminUser? admin = ref.read(adminAuthStateProvider).valueOrNull;
+      final bool onLoginPage = state.matchedLocation == AppRoutes.adminLogin;
+
+      // Unauthenticated user reaching for a protected screen → send to login.
+      if (!onLoginPage && admin == null) return AppRoutes.adminLogin;
+      // Already signed in but sitting on login → jump to the dashboard.
+      if (onLoginPage && admin != null) return AppRoutes.adminDashboard;
+      return null;
+    },
+    routes: <RouteBase>[
       GoRoute(
         path: AppRoutes.adminLogin,
         builder: (_, _) => const AdminLoginScreen(),

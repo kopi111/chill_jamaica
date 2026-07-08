@@ -26,14 +26,27 @@ android {
     }
 
     defaultConfig {
-        // TODO: Specify your own unique Application ID (https://developer.android.com/studio/build/application-id.html).
         applicationId = "com.chilljamaica.chill_jamaica"
-        // You can update the following values to match your application needs.
-        // For more information, see: https://flutter.dev/to/review-gradle-config.
         minSdk = flutter.minSdkVersion
         targetSdk = flutter.targetSdkVersion
         versionCode = flutter.versionCode
         versionName = flutter.versionName
+        manifestPlaceholders["appName"] = "Jamaica Chilled"
+    }
+
+    // Two apps from one codebase: the customer/order app and the admin app.
+    // Each gets its own applicationId so both can be installed side by side.
+    flavorDimensions += "app"
+    productFlavors {
+        create("customer") {
+            dimension = "app"
+            manifestPlaceholders["appName"] = "Jamaica Chilled"
+        }
+        create("admin") {
+            dimension = "app"
+            applicationId = "com.chilljamaica.chill_jamaica.admin"
+            manifestPlaceholders["appName"] = "Jamaica Chilled Admin"
+        }
     }
 
     buildTypes {
