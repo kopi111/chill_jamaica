@@ -6,8 +6,8 @@
 abstract final class AppStrings {
   const AppStrings._();
 
-  static const String appName = 'Chill Jamaica';
-  static const String appNameEmoji = 'Chill Jamaica 🥥';
+  static const String appName = 'Jamaica Chilled';
+  static const String appNameEmoji = 'Jamaica Chilled 🥥';
   static const String tagline = 'Fresh Coconut Water, Straight To Yuh Door';
 
   // --- Menu ---
@@ -49,7 +49,7 @@ abstract final class AppStrings {
   static const String lookupPhonePrompt = 'Enter yuh phone number to see yuh orders';
 
   // --- Admin ---
-  static const String adminAppName = 'Chill Jamaica — Admin';
+  static const String adminAppName = 'Jamaica Chilled — Admin';
   static const String adminLogin = 'Admin Login';
   static const String emailLabel = 'Email';
   static const String passwordLabel = 'Password';

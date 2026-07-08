@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
@@ -12,6 +11,7 @@ import '../../../../core/utils/formatters.dart';
 import '../../../../shared/widgets/empty_view.dart';
 import '../../../../shared/widgets/error_view.dart';
 import '../../../../shared/widgets/loading_indicator.dart';
+import '../../../../shared/widgets/product_image.dart';
 import '../../../menu/domain/entities/product.dart';
 import '../providers/admin_product_providers.dart';
 
@@ -142,7 +142,7 @@ class _ProductRow extends ConsumerWidget {
   }
 }
 
-/// Square product thumbnail — remote image when set, gradient fallback otherwise.
+/// Square product thumbnail — remote image, bundled asset, or brand-logo default.
 class _Thumbnail extends StatelessWidget {
   const _Thumbnail({required this.product});
 
@@ -150,33 +150,10 @@ class _Thumbnail extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return ClipRRect(
-      borderRadius: BorderRadius.circular(AppDimensions.radiusSm),
-      child: SizedBox(
-        width: 52,
-        height: 52,
-        child: product.hasImage
-            ? CachedNetworkImage(
-                imageUrl: product.imagePlaceholder,
-                fit: BoxFit.cover,
-                placeholder: (_, _) => const _ThumbFallback(),
-                errorWidget: (_, _, _) => const _ThumbFallback(),
-              )
-            : const _ThumbFallback(),
-      ),
-    );
-  }
-}
-
-class _ThumbFallback extends StatelessWidget {
-  const _ThumbFallback();
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(gradient: AppColors.coconutPlaceholder),
-      alignment: Alignment.center,
-      child: const Text('🥥', style: TextStyle(fontSize: 24)),
+    return SizedBox(
+      width: 52,
+      height: 52,
+      child: ProductImage(imageRef: product.imagePlaceholder),
     );
   }
 }

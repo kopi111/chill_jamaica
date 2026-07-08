@@ -1,4 +1,3 @@
-import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
@@ -8,6 +7,7 @@ import '../../../../core/constants/app_colors.dart';
 import '../../../../core/constants/app_dimensions.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/utils/extensions.dart';
+import '../../../../shared/widgets/product_image.dart';
 import '../../../menu/domain/entities/product.dart';
 import '../providers/admin_product_providers.dart';
 
@@ -244,7 +244,7 @@ class _AdminProductFormScreenState
 }
 
 /// Live preview of the entered image URL, so the admin sees the picture before
-/// saving. Falls back to the gradient placeholder when empty or broken.
+/// saving. Shows the Jamaica Chilled brand logo when no custom URL is set.
 class _ImagePreview extends StatelessWidget {
   const _ImagePreview({required this.controller});
 
@@ -253,43 +253,24 @@ class _ImagePreview extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     final String url = controller.text.trim();
-    final bool hasUrl = url.startsWith('http');
-    return AspectRatio(
-      aspectRatio: 16 / 9,
-      child: ClipRRect(
-        borderRadius: BorderRadius.circular(AppDimensions.radiusMd),
-        child: hasUrl
-            ? CachedNetworkImage(
-                imageUrl: url,
-                fit: BoxFit.cover,
-                placeholder: (_, _) => const _PreviewFallback(label: 'Loading…'),
-                errorWidget: (_, _, _) =>
-                    const _PreviewFallback(label: 'Image not found'),
-              )
-            : const _PreviewFallback(label: 'No image — paste a URL below'),
-      ),
-    );
-  }
-}
-
-class _PreviewFallback extends StatelessWidget {
-  const _PreviewFallback({required this.label});
-
-  final String label;
-
-  @override
-  Widget build(BuildContext context) {
-    return Container(
-      decoration: const BoxDecoration(gradient: AppColors.coconutPlaceholder),
-      alignment: Alignment.center,
-      child: Column(
-        mainAxisSize: MainAxisSize.min,
-        children: <Widget>[
-          const Text('🥥', style: TextStyle(fontSize: 40)),
+    return Column(
+      children: <Widget>[
+        AspectRatio(
+          aspectRatio: 16 / 9,
+          child: ProductImage(
+            imageRef: url,
+            borderRadius: AppDimensions.radiusMd,
+          ),
+        ),
+        if (!url.startsWith('http')) ...<Widget>[
           const SizedBox(height: AppDimensions.spaceXs),
-          Text(label, style: context.textStyles.bodySmall),
+          Text(
+            'No custom image — showing brand logo. Paste a URL below to change.',
+            style: context.textStyles.bodySmall,
+            textAlign: TextAlign.center,
+          ),
         ],
-      ),
+      ],
     );
   }
 }

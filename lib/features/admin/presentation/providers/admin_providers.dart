@@ -53,7 +53,7 @@ class AdminLoginController extends AutoDisposeAsyncNotifier<void> {
       ref.read(hardcodedAdminSessionProvider.notifier).state = const AdminUser(
         uid: 'local-admin',
         email: _devAdminEmail,
-        displayName: 'Chill Jamaica Admin',
+        displayName: 'Jamaica Chilled Admin',
         role: 'super_admin',
       );
       state = const AsyncValue<void>.data(null);
