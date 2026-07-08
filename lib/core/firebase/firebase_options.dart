@@ -5,8 +5,8 @@
 // Firestore/Storage security rules. Regenerate with:
 //   flutterfire configure --project=chill-coconetwater --platforms=android,ios
 //
-// Web is not configured (the app targets Android + iOS only). Add `web` to
-// --platforms above if a web build is ever needed.
+// Android + iOS are the primary targets; a web app is also registered so the
+// app can run in Chrome for quick testing.
 import 'package:firebase_core/firebase_core.dart' show FirebaseOptions;
 import 'package:flutter/foundation.dart'
     show defaultTargetPlatform, kIsWeb, TargetPlatform;
@@ -48,11 +48,12 @@ class DefaultFirebaseOptions {
     iosBundleId: 'com.chilljamaica.chillJamaica',
   );
   static const FirebaseOptions web = FirebaseOptions(
-    apiKey: 'PLACEHOLDER_WEB_API_KEY',
-    appId: '1:000000000000:web:0000000000000000000000',
-    messagingSenderId: '000000000000',
+    apiKey: 'AIzaSyCOz3flOlFiXOnjlqvr6hYoPzj7UJoTuH8',
+    appId: '1:532994149364:web:d05c9c19bfe22c6f6687a1',
+    messagingSenderId: '532994149364',
     projectId: 'chill-coconetwater',
-    storageBucket: 'chill-coconetwater.appspot.com',
+    storageBucket: 'chill-coconetwater.firebasestorage.app',
     authDomain: 'chill-coconetwater.firebaseapp.com',
+    measurementId: 'G-7D0DFCWBQ7',
   );
 }
