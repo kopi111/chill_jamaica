@@ -35,6 +35,28 @@ class Product {
   String get sizeLabel =>
       sizeMl < 1000 ? '${sizeMl}ml' : '${(sizeMl / 1000).toStringAsFixed(2)}L';
 
+  /// True when a real remote image is set (vs. the gradient fallback).
+  bool get hasImage => imagePlaceholder.trim().startsWith('http');
+
+  /// Returns a copy with the given fields replaced — used by the admin editor.
+  Product copyWith({
+    String? id,
+    String? name,
+    int? sizeMl,
+    int? priceJmd,
+    String? imagePlaceholder,
+    bool? isAvailable,
+  }) {
+    return Product(
+      id: id ?? this.id,
+      name: name ?? this.name,
+      sizeMl: sizeMl ?? this.sizeMl,
+      priceJmd: priceJmd ?? this.priceJmd,
+      imagePlaceholder: imagePlaceholder ?? this.imagePlaceholder,
+      isAvailable: isAvailable ?? this.isAvailable,
+    );
+  }
+
   @override
   bool operator ==(Object other) =>
       identical(this, other) || (other is Product && other.id == id);

@@ -60,6 +60,11 @@ class _AdminDashboardScreenState extends ConsumerState<AdminDashboardScreen> {
       appBar: AppBar(
         title: const Text(AppStrings.dashboardTitle),
         actions: <Widget>[
+          IconButton(
+            tooltip: AppStrings.manageProducts,
+            onPressed: () => context.push(AppRoutes.adminProducts),
+            icon: const Icon(Icons.inventory_2_outlined),
+          ),
           _NotificationBell(count: pending),
           IconButton(
             tooltip: AppStrings.logout,

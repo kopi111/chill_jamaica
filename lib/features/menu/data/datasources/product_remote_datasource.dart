@@ -10,6 +10,13 @@ import '../models/product_model.dart';
 abstract interface class ProductRemoteDataSource {
   Future<List<ProductModel>> fetchProducts();
   Stream<List<ProductModel>> watchProducts();
+
+  /// Every product, available or not — for the admin catalogue.
+  Stream<List<ProductModel>> watchAllProducts();
+
+  Future<void> addProduct(ProductModel product);
+  Future<void> updateProduct(ProductModel product);
+  Future<void> deleteProduct(String id);
 }
 
 class FirestoreProductDataSource implements ProductRemoteDataSource {
@@ -19,8 +26,10 @@ class FirestoreProductDataSource implements ProductRemoteDataSource {
 
   static const String _collection = 'products';
 
-  Query<Map<String, dynamic>> get _availableProducts => _firestore
-      .collection(_collection)
+  CollectionReference<Map<String, dynamic>> get _products =>
+      _firestore.collection(_collection);
+
+  Query<Map<String, dynamic>> get _availableProducts => _products
       .where('is_available', isEqualTo: true)
       .orderBy('price_jmd');
 
@@ -40,4 +49,38 @@ class FirestoreProductDataSource implements ProductRemoteDataSource {
       .snapshots()
       .map((QuerySnapshot<Map<String, dynamic>> s) =>
           s.docs.map(ProductModel.fromDoc).toList());
+
+  @override
+  Stream<List<ProductModel>> watchAllProducts() => _products
+      .orderBy('price_jmd')
+      .snapshots()
+      .map((QuerySnapshot<Map<String, dynamic>> s) =>
+          s.docs.map(ProductModel.fromDoc).toList());
+
+  @override
+  Future<void> addProduct(ProductModel product) async {
+    try {
+      await _products.add(product.toCreateMap());
+    } on FirebaseException catch (e) {
+      throw ServerException('Failed to add product', cause: e);
+    }
+  }
+
+  @override
+  Future<void> updateProduct(ProductModel product) async {
+    try {
+      await _products.doc(product.id).update(product.toUpdateMap());
+    } on FirebaseException catch (e) {
+      throw ServerException('Failed to update product', cause: e);
+    }
+  }
+
+  @override
+  Future<void> deleteProduct(String id) async {
+    try {
+      await _products.doc(id).delete();
+    } on FirebaseException catch (e) {
+      throw ServerException('Failed to delete product', cause: e);
+    }
+  }
 }

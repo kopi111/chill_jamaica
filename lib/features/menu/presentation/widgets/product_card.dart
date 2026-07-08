@@ -1,3 +1,4 @@
+import 'package:cached_network_image/cached_network_image.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -58,7 +59,7 @@ class _ProductCardState extends ConsumerState<ProductCard>
         child: Column(
           crossAxisAlignment: CrossAxisAlignment.stretch,
           children: <Widget>[
-            const Expanded(child: _CoconutArtPlaceholder()),
+            Expanded(child: _ProductImage(product: product)),
             const SizedBox(height: AppDimensions.spaceSm),
             Text(
               product.name,
@@ -108,7 +109,30 @@ class _ProductCardState extends ConsumerState<ProductCard>
   }
 }
 
-/// Gradient stand-in for the real bottle art. Replace with an asset later.
+/// Shows the product's remote image when one is set, falling back to the
+/// gradient placeholder while loading, on error, or when no image exists.
+class _ProductImage extends StatelessWidget {
+  const _ProductImage({required this.product});
+
+  final Product product;
+
+  @override
+  Widget build(BuildContext context) {
+    if (!product.hasImage) return const _CoconutArtPlaceholder();
+    return ClipRRect(
+      borderRadius: BorderRadius.circular(AppDimensions.radiusSm),
+      child: CachedNetworkImage(
+        imageUrl: product.imagePlaceholder,
+        fit: BoxFit.cover,
+        width: double.infinity,
+        placeholder: (_, _) => const _CoconutArtPlaceholder(),
+        errorWidget: (_, _, _) => const _CoconutArtPlaceholder(),
+      ),
+    );
+  }
+}
+
+/// Gradient stand-in for the real bottle art, used when no image is set.
 class _CoconutArtPlaceholder extends StatelessWidget {
   const _CoconutArtPlaceholder();
 

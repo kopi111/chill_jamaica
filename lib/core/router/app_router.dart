@@ -6,6 +6,9 @@ import '../../features/admin/domain/entities/admin_user.dart';
 import '../../features/admin/presentation/providers/admin_providers.dart';
 import '../../features/admin/presentation/screens/admin_dashboard_screen.dart';
 import '../../features/admin/presentation/screens/admin_login_screen.dart';
+import '../../features/admin/presentation/screens/admin_product_form_screen.dart';
+import '../../features/admin/presentation/screens/admin_products_screen.dart';
+import '../../features/menu/domain/entities/product.dart';
 import '../../features/menu/presentation/screens/menu_screen.dart';
 import '../../features/order/presentation/screens/cart_screen.dart';
 import '../../features/order/presentation/screens/my_orders_screen.dart';
@@ -64,6 +67,21 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.adminDashboard,
         builder: (_, _) => const AdminDashboardScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.adminProducts,
+        builder: (_, _) => const AdminProductsScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.adminProductForm,
+        builder: (BuildContext context, GoRouterState state) {
+          final Object? extra = state.extra;
+          // Editing an existing product passes it as `extra`; a null means
+          // "create a new product".
+          return AdminProductFormScreen(
+            product: extra is Product ? extra : null,
+          );
+        },
       ),
     ],
     errorBuilder: (BuildContext context, GoRouterState state) => Scaffold(

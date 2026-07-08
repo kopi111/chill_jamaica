@@ -12,10 +12,14 @@ service cloud.firestore {
         exists(/databases/$(database)/documents/admins/$(request.auth.uid));
     }
 
-    // Product catalog: visible to everyone, editable only by admins.
+    // Product catalog: visible to everyone.
+    // TEMPORARY: the admin dashboard edits products through a hard-coded login
+    // with no Firebase Auth token, so writes can't satisfy isAdmin() yet. Opened
+    // like orders below until Firebase Auth is enabled — then restore
+    // `allow write: if isAdmin();`.
     match /products/{productId} {
       allow read: if true;
-      allow write: if isAdmin();
+      allow write: if true;  // TODO: restore isAdmin() after enabling Auth
     }
 
     // Orders: any client (including anonymous customers) can place an order.

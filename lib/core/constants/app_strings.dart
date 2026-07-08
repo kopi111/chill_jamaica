@@ -64,6 +64,24 @@ abstract final class AppStrings {
   static const String exportTodaysOrders = 'Export Today\'s Orders';
   static const String newOrderNotification = 'New Coconut Water Order! 🥥';
 
+  // --- Admin: product catalogue ---
+  static const String manageProducts = 'Products';
+  static const String addProduct = 'Add Product';
+  static const String editProduct = 'Edit Product';
+  static const String deleteProduct = 'Delete Product';
+  static const String deleteProductConfirm =
+      'Remove dis product from di menu? Dis can\'t be undone.';
+  static const String productSaved = 'Product saved!';
+  static const String productDeleted = 'Product removed.';
+  static const String noProductsYet = 'No products yet — add di first one!';
+  static const String productNameLabel = 'Product Name';
+  static const String productSizeLabel = 'Size (ml)';
+  static const String productPriceLabel = 'Price (JMD)';
+  static const String productImageUrlLabel = 'Image URL (optional)';
+  static const String productImageUrlHint = 'https://…/coconut.jpg';
+  static const String productAvailableLabel = 'Available to order';
+  static const String saveProduct = 'Save Product';
+
   // --- Patois flavour ---
   static const String allGood = 'Everyting criss!';
   static const String takeCare = 'Walk good!';

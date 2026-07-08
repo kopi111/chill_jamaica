@@ -9,4 +9,6 @@ abstract final class AppRoutes {
 
   static const String adminLogin = '/admin/login';
   static const String adminDashboard = '/admin/dashboard';
+  static const String adminProducts = '/admin/products';
+  static const String adminProductForm = '/admin/products/form';
 }
