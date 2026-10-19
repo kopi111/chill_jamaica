@@ -35,6 +35,23 @@ abstract final class AppStrings {
   static const String lowAccuracyWarning =
       'Location accuracy is low — di driver might need a call. Add a note if yuh can.';
 
+  // --- Payment ---
+  static const String paymentSectionTitle = 'Payment';
+  static const String payByCard = 'Pay by Card';
+  static const String continueToPayment = 'Continue to Payment';
+  static const String payNow = 'Pay';
+  static const String amountDue = 'Amount Due';
+  static const String cardNumberLabel = 'Card Number';
+  static const String cardHolderLabel = 'Name on Card';
+  static const String cardExpiryLabel = 'Expiry';
+  static const String cardCvvLabel = 'CVV';
+  static const String cardSecurityNote =
+      'Yuh card details go straight to di payment processor — dem never stored '
+      'in di app.';
+  static const String paymentConfirmedTitle = 'Payment Confirmed 🥥';
+  static const String paymentConfirmedBody = 'Wi got yuh payment. Order on di way!';
+  static const String paidWith = 'Paid with';
+
   // --- Order confirmation ---
   static const String orderPlaced = 'Order Placed!';
   static const String freshnessComing = 'Wi bringing di freshness to yuh! 🇯🇲🥥';
@@ -47,6 +64,30 @@ abstract final class AppStrings {
   static const String myOrdersTitle = 'My Orders';
   static const String ordersEmpty = 'Yuh neva order nuttin yet!';
   static const String lookupPhonePrompt = 'Enter yuh phone number to see yuh orders';
+
+  // --- Account ---
+  static const String createAccount = 'Create Account';
+  static const String createAccountSubtitle =
+      'One profile, and every order after dis one takes seconds.';
+  static const String welcomeBack = 'Welcome back!';
+  static const String signInSubtitle = 'Sign in to order yuh coconut water.';
+  static const String fullNameLabel = 'Full Name';
+  static const String confirmPasswordLabel = 'Confirm Password';
+  static const String homeAddressLabel = 'Home Address (optional)';
+  static const String workAddressLabel = 'Work Address (optional)';
+  static const String addPhotoPrompt = 'Tap to add a photo';
+  static const String haveAccountPrompt = 'Already have an account?';
+  static const String noAccountPrompt = 'New here?';
+  static const String signUp = 'Sign Up';
+  static const String myProfile = 'My Profile';
+  static const String editProfile = 'Edit Profile';
+  static const String saveChanges = 'Save Changes';
+  static const String profileSaved = 'Profile saved!';
+  static const String accountCreated = 'Account created — welcome to di family!';
+  static const String signInToCheckout = 'Sign in to check out';
+  static const String signInToCheckoutBody =
+      'Wi need a profile so wi know where fi bring it and who fi call.';
+  static const String signOutConfirm = 'Sign out of yuh account?';
 
   // --- Admin ---
   static const String adminAppName = 'Jamaica Chilled — Admin';

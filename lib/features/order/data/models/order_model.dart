@@ -1,5 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 
+import '../../../payment/domain/entities/card_brand.dart';
+import '../../../payment/domain/entities/payment_method.dart';
+import '../../../payment/domain/entities/payment_status.dart';
+import '../../../payment/domain/entities/payment_summary.dart';
 import '../../domain/entities/customer_order.dart';
 import '../../domain/entities/delivery_details.dart';
 import '../../domain/entities/order_draft.dart';
@@ -19,6 +23,7 @@ abstract final class OrderModel {
     final DeliveryDetails d = draft.delivery;
     return <String, dynamic>{
       'customerPhone': draft.customerPhone,
+      'customerId': draft.customerId,
       'deliveryMethod': d.method.wireValue,
       'deliveryAddress': _addressForWire(d),
       'gpsCoordinates': d.coordinates == null
@@ -28,6 +33,7 @@ abstract final class OrderModel {
       'subtotal': draft.subtotal,
       'deliveryFee': draft.deliveryFee,
       'total': draft.total,
+      'payment': _paymentToMap(draft.payment),
       'status': OrderStatus.newOrder.wireValue,
       'statusHistory': <Map<String, dynamic>>[
         <String, dynamic>{
@@ -50,6 +56,7 @@ abstract final class OrderModel {
     final DeliveryDetails d = draft.delivery;
     return <String, dynamic>{
       'customerPhone': draft.customerPhone,
+      'customerId': draft.customerId,
       'deliveryMethod': d.method.wireValue,
       'deliveryAddress': _addressForWire(d),
       'lat': d.coordinates?.latitude,
@@ -58,6 +65,7 @@ abstract final class OrderModel {
       'subtotal': draft.subtotal,
       'deliveryFee': draft.deliveryFee,
       'total': draft.total,
+      'payment': _paymentToMap(draft.payment),
     };
   }
 
@@ -68,6 +76,7 @@ abstract final class OrderModel {
     final double? lng = (json['lng'] as num?)?.toDouble();
     return <String, dynamic>{
       'customerPhone': json['customerPhone'],
+      'customerId': json['customerId'],
       'deliveryMethod': json['deliveryMethod'],
       'deliveryAddress': json['deliveryAddress'],
       'gpsCoordinates': (lat != null && lng != null) ? GeoPoint(lat, lng) : null,
@@ -75,6 +84,7 @@ abstract final class OrderModel {
       'subtotal': json['subtotal'],
       'deliveryFee': json['deliveryFee'],
       'total': json['total'],
+      'payment': json['payment'],
       'status': OrderStatus.newOrder.wireValue,
       'statusHistory': <Map<String, dynamic>>[
         <String, dynamic>{
@@ -94,17 +104,44 @@ abstract final class OrderModel {
     return CustomerOrder(
       id: doc.id,
       customerPhone: (data['customerPhone'] as String?) ?? '',
+      customerId: data['customerId'] as String?,
       delivery: _deliveryFromData(data),
       items: _itemsFromData(data['items']),
       subtotal: (data['subtotal'] as num?)?.toInt() ?? 0,
       deliveryFee: (data['deliveryFee'] as num?)?.toInt() ?? 0,
       total: (data['total'] as num?)?.toInt() ?? 0,
       status: OrderStatus.fromWire(data['status'] as String?),
+      payment: _paymentFromData(data['payment']),
       createdAt: (data['createdAt'] as Timestamp?)?.toDate() ?? DateTime.now(),
     );
   }
 
   // --- Helpers ---
+
+  static Map<String, dynamic> _paymentToMap(PaymentSummary payment) =>
+      <String, dynamic>{
+        'method': payment.method.wireValue,
+        'status': payment.status.wireValue,
+        'gatewayReference': payment.gatewayReference,
+        'cardBrand': payment.cardBrand?.wireValue,
+        'cardLast4': payment.cardLast4,
+      };
+
+  /// Orders placed before payments existed have no `payment` map; they were all
+  /// cash on delivery.
+  static PaymentSummary _paymentFromData(Object? raw) {
+    if (raw is! Map<dynamic, dynamic>) {
+      return const PaymentSummary.cashOnDelivery();
+    }
+    final String? brand = raw['cardBrand'] as String?;
+    return PaymentSummary(
+      method: PaymentMethod.fromWire(raw['method'] as String?),
+      status: PaymentStatus.fromWire(raw['status'] as String?),
+      gatewayReference: raw['gatewayReference'] as String?,
+      cardBrand: brand == null ? null : CardBrand.fromWire(brand),
+      cardLast4: raw['cardLast4'] as String?,
+    );
+  }
 
   static String? _addressForWire(DeliveryDetails d) =>
       d.method == DeliveryMethod.address ? d.typedAddress : d.resolvedAddress;

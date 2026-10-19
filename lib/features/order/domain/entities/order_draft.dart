@@ -2,6 +2,7 @@ import 'package:flutter/foundation.dart';
 
 import '../../../../core/utils/extensions.dart';
 import '../../../menu/domain/entities/product.dart';
+import '../../../payment/domain/entities/payment_summary.dart';
 import 'cart_item.dart';
 import 'delivery_details.dart';
 import 'order_item.dart';
@@ -16,14 +17,23 @@ class OrderDraft {
     required this.customerPhone,
     required this.delivery,
     required List<CartItem> cartItems,
+    this.payment = const PaymentSummary.cashOnDelivery(),
+    this.customerId,
     this.deliveryFee = 0,
   }) : items = List<OrderItem>.unmodifiable(
           cartItems.map(OrderItem.fromCartItem),
         );
 
   final String customerPhone;
+
+  /// The signed-in customer's uid, so they can see this order on any device.
+  final String? customerId;
+
   final DeliveryDetails delivery;
   final List<OrderItem> items;
+
+  /// How this order is being paid for. Card orders arrive already settled.
+  final PaymentSummary payment;
 
   /// Placeholder — currently always 0; kept so pricing can grow later.
   final int deliveryFee;

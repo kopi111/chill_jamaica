@@ -47,4 +47,27 @@ abstract final class Validators {
     if (value.length < 6) return 'Password must be at least 6 characters';
     return null;
   }
+
+  /// Customer's full name — needs a first and last name for the delivery driver.
+  static String? fullName(String? raw) {
+    final String value = (raw ?? '').trim();
+    if (value.isEmpty) return 'Enter yuh name';
+    if (!value.contains(RegExp(r'\s'))) return 'Enter first and last name';
+    return null;
+  }
+
+  /// Confirmation field on the sign-up form.
+  static String? passwordMatching(String? raw, String original) {
+    final String value = raw ?? '';
+    if (value.isEmpty) return 'Type yuh password again';
+    if (value != original) return 'Passwords nuh match';
+    return null;
+  }
+
+  /// A saved home/work address, which the customer may leave blank.
+  static String? optionalAddress(String? raw) {
+    final String value = (raw ?? '').trim();
+    if (value.isEmpty) return null;
+    return deliveryAddress(value);
+  }
 }

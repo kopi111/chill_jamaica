@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!--
+  Debug-only network policy.
+
+  Android blocks cleartext HTTP by default, and the Firebase Emulator Suite
+  serves Auth, Firestore and Storage over plain HTTP. Without this, sign-up
+  fails with "Cleartext HTTP traffic to <host> not permitted".
+
+  Cleartext is allowed outright rather than per-domain because the emulator host
+  varies: 10.0.2.2 from an Android emulator, or the laptop's LAN address from a
+  physical device. This file lives in src/debug, so release builds keep the
+  strict default and never permit cleartext.
+-->
+<network-security-config>
+    <base-config cleartextTrafficPermitted="true" />
+</network-security-config>

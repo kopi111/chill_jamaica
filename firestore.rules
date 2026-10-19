@@ -12,6 +12,13 @@ service cloud.firestore {
         exists(/databases/$(database)/documents/admins/$(request.auth.uid));
     }
 
+    /**
+     * True when the caller is the signed-in customer whose document this is.
+     */
+    function isSelf(customerId) {
+      return request.auth != null && request.auth.uid == customerId;
+    }
+
     // Product catalog: visible to everyone.
     // TEMPORARY: the admin dashboard edits products through a hard-coded login
     // with no Firebase Auth token, so writes can't satisfy isAdmin() yet. Opened
@@ -30,6 +37,17 @@ service cloud.firestore {
       allow create: if true;
       allow read: if true;    // TODO: restore isAdmin() after enabling Auth
       allow update: if true;  // TODO: restore isAdmin() after enabling Auth
+      allow delete: if false;
+    }
+
+    // Customer profiles: a customer sees and edits only their own, and nobody
+    // else's — the profile carries a name, phone, address and photo. Cloud
+    // Functions read the fcmToken through the Admin SDK, which bypasses rules.
+    // Profiles are never deleted from the client.
+    match /customers/{customerId} {
+      allow create: if isSelf(customerId);
+      allow read: if isSelf(customerId);
+      allow update: if isSelf(customerId);
       allow delete: if false;
     }
 

@@ -7,6 +7,7 @@ import '../../../../core/constants/app_dimensions.dart';
 import '../../../../core/constants/app_strings.dart';
 import '../../../../core/router/app_routes.dart';
 import '../../../../core/utils/extensions.dart';
+import '../../../payment/domain/entities/payment_summary.dart';
 
 /// Data handed to the confirmation screen via go_router `extra`.
 class OrderConfirmationArgs {
@@ -14,11 +15,13 @@ class OrderConfirmationArgs {
     required this.orderId,
     required this.wasQueuedOffline,
     required this.deliveryAddress,
+    required this.payment,
   });
 
   final String orderId;
   final bool wasQueuedOffline;
   final String deliveryAddress;
+  final PaymentSummary payment;
 }
 
 /// Success screen after placing an order.
@@ -29,6 +32,20 @@ class OrderConfirmationScreen extends StatelessWidget {
 
   String get _shortId =>
       '#${args.orderId.substring(0, args.orderId.length < 6 ? args.orderId.length : 6).toUpperCase()}';
+
+  /// A settled card payment gets its own headline — the customer just parted
+  /// with money and wants to see it landed.
+  String get _title {
+    if (args.wasQueuedOffline) return 'Order Saved!';
+    if (args.payment.status.isSettled) return AppStrings.paymentConfirmedTitle;
+    return AppStrings.orderPlaced;
+  }
+
+  String get _body {
+    if (args.wasQueuedOffline) return AppStrings.offlineBanner;
+    if (args.payment.status.isSettled) return AppStrings.paymentConfirmedBody;
+    return AppStrings.freshnessComing;
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -43,16 +60,14 @@ class OrderConfirmationScreen extends StatelessWidget {
               const _SuccessBadge(),
               const SizedBox(height: AppDimensions.spaceLg),
               Text(
-                args.wasQueuedOffline ? 'Order Saved!' : AppStrings.orderPlaced,
+                _title,
                 textAlign: TextAlign.center,
                 style: context.textStyles.headlineMedium
                     ?.copyWith(fontWeight: FontWeight.w800),
               ),
               const SizedBox(height: AppDimensions.spaceSm),
               Text(
-                args.wasQueuedOffline
-                    ? AppStrings.offlineBanner
-                    : AppStrings.freshnessComing,
+                _body,
                 textAlign: TextAlign.center,
                 style: context.textStyles.bodyLarge,
               ),
@@ -63,6 +78,10 @@ class OrderConfirmationScreen extends StatelessWidget {
                 value: args.deliveryAddress.isEmpty
                     ? 'On file'
                     : args.deliveryAddress,
+              ),
+              _InfoTile(
+                label: AppStrings.paidWith,
+                value: args.payment.maskedCard,
               ),
               if (!args.wasQueuedOffline)
                 const _InfoTile(

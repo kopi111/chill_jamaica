@@ -1,1 +1,68 @@
-{"firestore":{"rules":"firestore.rules","indexes":"firestore.indexes.json"},"functions":[{"source":"functions","codebase":"default","ignore":["node_modules",".git","firebase-debug.log","firebase-debug.*.log","*.local"],"predeploy":["npm --prefix \"$RESOURCE_DIR\" run build"]}],"emulators":{"auth":{"port":9099},"firestore":{"port":8080},"functions":{"port":5001},"ui":{"enabled":true},"singleProjectMode":true},"flutter":{"platforms":{"android":{"default":{"projectId":"chill-coconetwater","appId":"1:532994149364:android:6a0c6b51e99eb4a86687a1","fileOutput":"android/app/google-services.json"}},"dart":{"lib/core/firebase/firebase_options.dart":{"projectId":"chill-coconetwater","configurations":{"android":"1:532994149364:android:6a0c6b51e99eb4a86687a1","ios":"1:532994149364:ios:02187285f320330e6687a1"}}}}}}
+{
+  "firestore": {
+    "rules": "firestore.rules",
+    "indexes": "firestore.indexes.json"
+  },
+  "functions": [
+    {
+      "source": "functions",
+      "codebase": "default",
+      "ignore": [
+        "node_modules",
+        ".git",
+        "firebase-debug.log",
+        "firebase-debug.*.log",
+        "*.local"
+      ],
+      "predeploy": [
+        "npm --prefix \"$RESOURCE_DIR\" run build"
+      ]
+    }
+  ],
+  "emulators": {
+    "auth": {
+      "port": 9099,
+      "host": "0.0.0.0"
+    },
+    "firestore": {
+      "port": 8080,
+      "host": "0.0.0.0"
+    },
+    "functions": {
+      "port": 5001,
+      "host": "0.0.0.0"
+    },
+    "ui": {
+      "enabled": true,
+      "host": "0.0.0.0"
+    },
+    "singleProjectMode": true,
+    "storage": {
+      "port": 9199,
+      "host": "0.0.0.0"
+    }
+  },
+  "flutter": {
+    "platforms": {
+      "android": {
+        "default": {
+          "projectId": "chill-coconetwater",
+          "appId": "1:532994149364:android:6a0c6b51e99eb4a86687a1",
+          "fileOutput": "android/app/google-services.json"
+        }
+      },
+      "dart": {
+        "lib/core/firebase/firebase_options.dart": {
+          "projectId": "chill-coconetwater",
+          "configurations": {
+            "android": "1:532994149364:android:6a0c6b51e99eb4a86687a1",
+            "ios": "1:532994149364:ios:02187285f320330e6687a1"
+          }
+        }
+      }
+    }
+  },
+  "storage": {
+    "rules": "storage.rules"
+  }
+}

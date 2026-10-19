@@ -1,6 +1,7 @@
 import 'package:flutter/foundation.dart';
 
 import '../../../../core/utils/extensions.dart';
+import '../../../payment/domain/entities/payment_summary.dart';
 import 'delivery_details.dart';
 import 'order_item.dart';
 import 'order_status.dart';
@@ -17,19 +18,26 @@ class CustomerOrder {
     required this.deliveryFee,
     required this.total,
     required this.status,
+    required this.payment,
     required this.createdAt,
+    this.customerId,
   });
 
   final String id;
 
   /// E.164 Jamaican number, e.g. `+18761234567`.
   final String customerPhone;
+
+  /// The signed-in customer's uid, absent on legacy phone-only orders.
+  final String? customerId;
+
   final DeliveryDetails delivery;
   final List<OrderItem> items;
   final int subtotal;
   final int deliveryFee;
   final int total;
   final OrderStatus status;
+  final PaymentSummary payment;
   final DateTime createdAt;
 
   /// Total number of bottles across all lines.

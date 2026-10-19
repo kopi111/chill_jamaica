@@ -3,23 +3,41 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import 'core/constants/app_strings.dart';
+import 'core/providers/firebase_providers.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
+import 'features/account/domain/entities/customer_profile.dart';
+import 'features/account/presentation/providers/account_providers.dart';
 import 'features/order/presentation/providers/order_providers.dart';
 import 'shared/providers/connectivity_provider.dart';
 
 /// Customer/order app: menu, cart, checkout and order lookup. Also flushes any
-/// offline order queue whenever connectivity returns.
+/// offline order queue whenever connectivity returns, and registers the device
+/// for payment receipts once a customer signs in.
 class CustomerApp extends ConsumerWidget {
   const CustomerApp({super.key});
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
     _syncQueueWhenOnline(ref);
+    _registerForPaymentReceipts(ref);
     return _AppShell(
       title: AppStrings.appName,
       router: ref.watch(customerRouterProvider),
     );
+  }
+
+  /// Subscribes the signed-in customer's device to payment notifications.
+  void _registerForPaymentReceipts(WidgetRef ref) {
+    ref.listen<AsyncValue<CustomerProfile?>>(signedInCustomerProvider,
+        (AsyncValue<CustomerProfile?>? previous,
+            AsyncValue<CustomerProfile?> next) {
+      final CustomerProfile? customer = next.valueOrNull;
+      if (customer == null) return;
+      ref
+          .read(customerNotificationServiceProvider)
+          .initializeForCustomer(customer.uid);
+    });
   }
 
   /// When the device comes back online, drain any queued offline orders.

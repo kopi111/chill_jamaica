@@ -2,6 +2,10 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../features/account/presentation/screens/edit_profile_screen.dart';
+import '../../features/account/presentation/screens/profile_screen.dart';
+import '../../features/account/presentation/screens/sign_in_screen.dart';
+import '../../features/account/presentation/screens/sign_up_screen.dart';
 import '../../features/admin/domain/entities/admin_user.dart';
 import '../../features/admin/presentation/providers/admin_providers.dart';
 import '../../features/admin/presentation/screens/admin_dashboard_screen.dart';
@@ -13,6 +17,7 @@ import '../../features/menu/presentation/screens/menu_screen.dart';
 import '../../features/order/presentation/screens/cart_screen.dart';
 import '../../features/order/presentation/screens/my_orders_screen.dart';
 import '../../features/order/presentation/screens/order_confirmation_screen.dart';
+import '../../features/payment/presentation/screens/card_payment_screen.dart';
 import 'app_routes.dart';
 
 /// Router for the customer/order app: browse the menu, cart, checkout and look
@@ -28,6 +33,33 @@ final customerRouterProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: AppRoutes.cart,
         builder: (_, _) => const CartScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.signIn,
+        builder: (_, _) => const SignInScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.signUp,
+        builder: (_, _) => const SignUpScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.profile,
+        builder: (_, _) => const ProfileScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.editProfile,
+        builder: (_, _) => const EditProfileScreen(),
+      ),
+      GoRoute(
+        path: AppRoutes.cardPayment,
+        builder: (BuildContext context, GoRouterState state) {
+          final Object? extra = state.extra;
+          if (extra is! CardPaymentArgs) {
+            // Deep-linked without a cart to pay for — start over.
+            return const CartScreen();
+          }
+          return CardPaymentScreen(args: extra);
+        },
       ),
       GoRoute(
         path: AppRoutes.orderConfirmation,

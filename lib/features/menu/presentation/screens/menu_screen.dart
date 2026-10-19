@@ -34,6 +34,11 @@ class MenuScreen extends ConsumerWidget {
             onPressed: () => context.push(AppRoutes.myOrders),
             icon: const Icon(Icons.receipt_long_outlined),
           ),
+          IconButton(
+            tooltip: AppStrings.myProfile,
+            onPressed: () => context.push(AppRoutes.profile),
+            icon: const Icon(Icons.person_outline),
+          ),
         ],
       ),
       body: OfflineBanner(
